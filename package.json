@@ -1,0 +1,24 @@
+{
+  "name": "web-dwarfs",
+  "version": "0.0.0",
+  "description": "An HTML5 clone of Dwarf Fortress just because.",
+  "main": "server/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/NateLillich/WebDwarfs"
+  },
+  "author": "Natalie Wolfe <natalie@lifewanted.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NateLillich/WebDwarfs/issues"
+  },
+  "dependencies": {
+    "express": "4.x",
+    "resource-compiler": "0.x",
+    "stylus": "0.x",
+    "jade": "1.x"
+  }
+}
