@@ -31,7 +31,7 @@
  * Even though the world stores everything in Z, Y, X order, all functions expect X, Y, Z order as
  * that is usually easier for people to understand.
  */
-lib.register( 'World', [], function(){
+lib.register( 'World', [ 'noise' ], function( noise ){
   var TILE_TYPES = {
     GRASS : 0,
     BUSH  : 1,
@@ -39,6 +39,13 @@ lib.register( 'World', [], function(){
   };
   var TILE_TYPE_NAMES = Object.keys( TILE_TYPES );
   var TILE_TYPE_COUNT = TILE_TYPE_NAMES.length;
+  var NOISE_SCALE     = 200;
+  var Z_SCALE         = 75;
+  var BIG_SCALE       = 1;
+  var MEDIUM_SCALE    = 2;
+  var SMALL_SCALE     = 3;
+  var DENSITY_SCALE   = 512;
+  var SOLID_POINT     = 50;
 
   // -------------------------------------------------------------------------------------------- //
 
@@ -71,13 +78,32 @@ lib.register( 'World', [], function(){
     this.height = y = parseInt( y, 10 );
     this.depth  = z = parseInt( z, 10 );
 
+    // var large       = new noise.Simplex3D( 0.07103920564986765  );
+    // var medium      = new noise.Simplex3D( 0.1194343869574368   );
+    // var small       = new noise.Simplex3D( 0.3741140146739781   );
+    var large       = new noise.Simplex3D( Math.random() );
+    var medium      = new noise.Simplex3D( Math.random() );
+    var small       = new noise.Simplex3D( Math.random() );
+    var bigNoise    = NOISE_SCALE / BIG_SCALE;
+    var mediumNoise = NOISE_SCALE / MEDIUM_SCALE;
+    var smallNoise  = NOISE_SCALE / SMALL_SCALE;
+
     var tiles = this.tiles = new Array( z );
-    for( var i = 0; i < z; ++i ){
-      var layer = tiles[ i ] = new Array( y );
+    for( var k = 0; k < z; ++k ){
+      var layer = tiles[ k ] = new Array( y );
+
       for( var j = 0; j < y; ++j ){
         var row = layer[ j ] = new Array( x );
-        for( var k = 0; k < x; ++k ){
-          row[ k ] = new Tile( parseInt( Math.random() * TILE_TYPE_COUNT, 10 ) );
+
+        for( var i = 0; i < x; ++i ){
+          var l = large .generate( i / bigNoise,    j / bigNoise,     k / Z_SCALE ) / BIG_SCALE;
+          var m = medium.generate( i / mediumNoise, j / mediumNoise,  k / Z_SCALE ) / MEDIUM_SCALE;
+          var s = small .generate( i / smallNoise,  j / smallNoise,   k / Z_SCALE ) / SMALL_SCALE;
+          var value = (l + m + s) * DENSITY_SCALE * (k * k / z);
+
+          if( value > SOLID_POINT ){
+            row[ i ] = new Tile( parseInt( Math.random() * TILE_TYPE_COUNT, 10 ) );
+          }
         }
       }
     }
@@ -99,7 +125,7 @@ lib.register( 'World', [], function(){
   // -------------------------------------------------------------------------------------------- //
 
   WorldPrototype.getTile = function( x, y, z ){
-    if( x < 0 || y < 0 || z < 0 ){
+    if( x < 0 || y < 0 || y >= this.height || z < 0 || z >= this.depth ){
       return undefined;
     }
     return this.tiles[ z ][ y ][ x ];
