@@ -44,6 +44,17 @@ lib.register(
       else {
         camera.setXVelocity( 0 );
       }
+
+      // Vertical movement.
+      if( keyState.isPressed( KEYS.E ) ){
+        camera.setZVelocity( -PAN_SPEED / 2 );
+      }
+      else if( keyState.isPressed( KEYS.Q ) ){
+        camera.setZVelocity( PAN_SPEED / 2 );
+      }
+      else {
+        camera.setZVelocity( 0 );
+      }
     };
 
     // ------------------------------------------------------------------------------------------ //
