@@ -35,6 +35,32 @@ lib.register( 'BasicObject', [], function(){
 
   // -------------------------------------------------------------------------------------------- //
 
+  BasicObjectPrototype.setPosition = function( x, y, z ){
+    this.x = Math.round( this._x = x );
+    this.y = Math.round( this._y = y );
+    this.z = Math.round( this._z = z );
+  };
+
+  // -------------------------------------------------------------------------------------------- //
+
+  BasicObjectPrototype.setXPosition = function( x ){
+    this.x = Math.round( this._x = x );
+  };
+
+  // -------------------------------------------------------------------------------------------- //
+
+  BasicObjectPrototype.setYPosition = function( y ){
+    this.y = Math.round( this._y = y );
+  };
+
+  // -------------------------------------------------------------------------------------------- //
+
+  BasicObjectPrototype.setXPosition = function( z ){
+    this.z = Math.round( this._z = z );
+  };
+
+  // -------------------------------------------------------------------------------------------- //
+
   BasicObjectPrototype.update = function( time ){
     // Update our position based on our velocity and the time passed.
     this.x = Math.round( this._x += this.velocity[ 0 ] * time );
